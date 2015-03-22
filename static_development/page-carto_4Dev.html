@@ -1,0 +1,68 @@
+<html>
+<head>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
+
+<script>
+
+  function main() {
+	var map_url = frompost.cartoViz;
+    cartodb.createVis('map', map_url, {
+        shareable: false,
+        title: false,
+        description: false,
+        search: false,
+        tiles_loader: true,
+        center_lat: 40,
+        center_lon: -100,
+        zoom: 5
+    })
+    .done(function(vis, layers) {
+      // layer 0 is the base layer, layer 1 is cartodb layer
+      // setInteraction is disabled by default
+      layers[1].setInteraction(true);
+      layers[1].on('featureOver', function(e, pos, latlng, data) {
+        cartodb.log.log(e, pos, latlng, data);
+      });
+	  
+      // use the native basemap
+      var map = vis.getNativeMap();
+	 
+	  
+  // change the query for the first layer
+      var subLayerOptions = {
+        sql: "SELECT * FROM table_2015_01_04_lnd"
+		/* ,cartocss: "#ne_10m_populated_places_simple{marker-fill: #F84F40; marker-width: 8; marker-line-color: white; marker-line-width: 2; marker-clip: false; marker-allow-overlap: true;}"*/
+      }
+
+      var sublayer = layer.getSubLayer(0);
+      sublayer.set(subLayerOptions);
+      sublayers.push(sublayer);
+    })
+    .error(function(err) {
+      console.log(err );
+    });
+  console.log("main finished");
+  console.log(frompost.cartoViz);
+  }
+  window.onload = main;
+
+</script>
+</head>
+<body>
+<div class="container" style="height:100%;">
+		<div id ="menu" style = "float:left; width:20%; padding-top:10px">  
+		<h3>Menu</h3>
+		<ul>
+			<li>WPA</li>
+			<li>CCC</li>
+		</ul>
+		</div>
+			<div id="map" style="height:100%; padding:0; margin:0; float:right; width:80%">
+				
+			</div>
+	
+</div>
+
+</body>
+
